@@ -46,6 +46,8 @@ var yourWinCOunt = 0;
 var computerWinCount = 0;
 var tieCount = 0;
 var totalGameCount = 0;
+var currentMode = "nameentry";
+var userName = "";
 
 var main = function (input) {
   var programOutput = programGeneratedSPS();
@@ -53,80 +55,90 @@ var main = function (input) {
   var gameOutcome;
   totalGameCount += 1;
 
-  // Validation check for input response
-  if (
-    input != "scissors" &&
-    input != "paper" &&
-    input != "stone" &&
-    input != "reversed scissors" &&
-    input != "reversed paper" &&
-    input != "reversed stone"
-  ) {
-    return `Please submit a valid input! Enter either scissors, paper or stone!`;
-  }
-
-  if (input.includes("reversed")) {
-    if (input == programReversedOutput) {
-      tieCount += 1;
-      gameOutcome = `Its a tie! `;
-    } else if (
-      (input == "reversed scissors" &&
-        programReversedOutput == "reversed stone") ||
-      (input == "reversed stone" &&
-        programReversedOutput == "reversed paper") ||
-      (input == "reversed paper" &&
-        programReversedOutput == "reversed scissors")
-    ) {
-      yourWinCOunt += 1;
-      gameOutcome = `You win! <br> You chose ${input} and the computer chose ${programReversedOutput}. Try another round!`;
-    } else {
-      computerWinCount += 1;
-      gameOutcome = `You lose! <br> You chose ${input} and the computer chose ${programReversedOutput}. Try another round!`;
-    }
+  // Initial mode to get username
+  if (currentMode == "nameentry") {
+    userName = input;
+    currentMode = "SPS";
+    return `Hello ${userName}!<br>Welcome to Scissors Paper Stone game, enter either scissors, paper or stone and see if you can win the machine! Goodluck~`;
   } else {
-    if (input == programOutput) {
-      tieCount += 1;
-      gameOutcome = `Its a tie!`;
-    } else if (
-      (input == "scissors" && programOutput == "paper") ||
-      (input == "stone" && programOutput == "scissors") ||
-      (input == "paper" && programOutput == "stone")
+    // Game mode
+    // Validation check for input response
+    if (
+      input != "scissors" &&
+      input != "paper" &&
+      input != "stone" &&
+      input != "reversed scissors" &&
+      input != "reversed paper" &&
+      input != "reversed stone"
     ) {
-      yourWinCOunt += 1;
-      gameOutcome = `You win! <br> You chose ${input} and the computer chose ${programOutput}. Try another round!`;
-    } else {
-      computerWinCount += 1;
-      gameOutcome = `You lose! <br> You chose ${input} and the computer chose ${programOutput}. Try another round!`;
+      return `Please submit a valid input! Enter either scissors, paper or stone!`;
     }
-  }
 
-  var winPercentage = percentage(yourWinCOunt, totalGameCount);
-  var losePercentage = percentage(computerWinCount, totalGameCount);
-  var tiePercentage = percentage(tieCount, totalGameCount);
+    //Reversed SPS
+    if (input.includes("reversed")) {
+      if (input == programReversedOutput) {
+        tieCount += 1;
+        gameOutcome = `Its a tie! <br> You chose ${input} and the computer chose ${programReversedOutput}. Try another round!`;
+      } else if (
+        (input == "reversed scissors" &&
+          programReversedOutput == "reversed stone") ||
+        (input == "reversed stone" &&
+          programReversedOutput == "reversed paper") ||
+        (input == "reversed paper" &&
+          programReversedOutput == "reversed scissors")
+      ) {
+        yourWinCOunt += 1;
+        gameOutcome = `You win! <br> You chose ${input} and the computer chose ${programReversedOutput}. Try another round!`;
+      } else {
+        computerWinCount += 1;
+        gameOutcome = `You lose! <br> You chose ${input} and the computer chose ${programReversedOutput}. Try another round!`;
+      }
+    } else {
+      //SPS
+      if (input == programOutput) {
+        tieCount += 1;
+        gameOutcome = `Its a tie!`;
+      } else if (
+        (input == "scissors" && programOutput == "paper") ||
+        (input == "stone" && programOutput == "scissors") ||
+        (input == "paper" && programOutput == "stone")
+      ) {
+        yourWinCOunt += 1;
+        gameOutcome = `You win! <br> You chose ${input} and the computer chose ${programOutput}. Try another round!`;
+      } else {
+        computerWinCount += 1;
+        gameOutcome = `You lose! <br> You chose ${input} and the computer chose ${programOutput}. Try another round!`;
+      }
+    }
 
-  if (input === "" && totalGameCount === 0) {
-    return "What is your name?";
-  } else {
-    return (
-      gameOutcome +
-      ("<br><br>GAME SCORE:" +
-        "<br>Total rounds played: " +
-        totalGameCount +
-        "<br>Wins: " +
-        yourWinCOunt +
-        " (" +
-        winPercentage +
-        "%)" +
-        "<br>Losses: " +
-        computerWinCount +
-        " (" +
-        losePercentage +
-        "%)" +
-        "<br>Ties: " +
-        tieCount +
-        " (" +
-        tiePercentage +
-        "%)")
-    );
+    var winPercentage = percentage(yourWinCOunt, totalGameCount);
+    var losePercentage = percentage(computerWinCount, totalGameCount);
+    var tiePercentage = percentage(tieCount, totalGameCount);
+
+    if (input === "" && totalGameCount === 0) {
+      return "What is your name?";
+    } else {
+      return (
+        gameOutcome +
+        ("<br><br>GAME SCORE:" +
+          "<br>Total rounds played: " +
+          totalGameCount +
+          "<br>Wins: " +
+          yourWinCOunt +
+          " (" +
+          winPercentage +
+          "%)" +
+          "<br>Losses: " +
+          computerWinCount +
+          " (" +
+          losePercentage +
+          "%)" +
+          "<br>Ties: " +
+          tieCount +
+          " (" +
+          tiePercentage +
+          "%)")
+      );
+    }
   }
 };
